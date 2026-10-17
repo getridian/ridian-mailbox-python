@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0a4 — unreleased
+## 0.1.0a4 — 2026-10-17
 
 - Public SDK repository, Python API reference, and source and issue links in package metadata.
 - CLI uses the same request validation and error handling as the Python library.
