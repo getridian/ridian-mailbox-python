@@ -1,0 +1,73 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pypi-release
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+  build:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.14'
+      - name: Verify release tag and main ancestry
+        run: |
+          git merge-base --is-ancestor HEAD origin/main
+          python - <<'PY'
+          import ast
+          import os
+          import pathlib
+          import tomllib
+          metadata = tomllib.loads(pathlib.Path('pyproject.toml').read_text())
+          version = metadata['project']['version']
+          assert os.environ['GITHUB_REF_NAME'] == 'v' + version, 'Tag/version mismatch'
+          module = ast.parse(pathlib.Path('src/ridian_mailbox/__init__.py').read_text())
+          versions = [ast.literal_eval(n.value) for n in module.body if isinstance(n, ast.Assign)
+                      and any(isinstance(t, ast.Name) and t.id == '__version__' for t in n.targets)]
+          assert versions == [version], 'Python/package version mismatch'
+          PY
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m build
+      - run: python -m twine check dist/* && python scripts/check_dist.py
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: distributions
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/project/ridian-mailbox/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: distributions
+          path: dist/
+      - name: Publish reviewed distributions with attestations
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        with:
+          print-hash: true
+          attestations: true

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ridian-mailbox"
+version = "0.1.0a4"
+description = "Python SDK and CLI for AI agent email inboxes with private access, events and webhooks"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{name = "Ridian"}]
+keywords = ["ridian", "email", "inbox", "ai-agents", "python-sdk", "webhooks", "mailbox"]
+classifiers = ["Development Status :: 3 - Alpha", "Programming Language :: Python :: 3", "Operating System :: POSIX", "Operating System :: MacOS"]
+
+[project.urls]
+Homepage = "https://getridian.com"
+Documentation = "https://github.com/getridian/ridian-mailbox-python#readme"
+Source = "https://github.com/getridian/ridian-mailbox-python"
+Issues = "https://github.com/getridian/ridian-mailbox-python/issues"
+Changelog = "https://github.com/getridian/ridian-mailbox-python/blob/main/CHANGELOG.md"
+
+[project.scripts]
+ridian-mailbox = "ridian_mailbox.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ridian_mailbox = ["py.typed"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
