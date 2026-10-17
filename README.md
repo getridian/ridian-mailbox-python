@@ -14,7 +14,7 @@ installation does not activate an API service. Use the origin provided for your
 Ridian environment. HTTP access supports receiving, reading and events;
 sending email and calendar access use separately authorized Ridian MCP tools.
 
-[Ridian](https://getridian.com/) · [API guide](https://docs.getridian.com/agent-mailbox/)
+[Ridian](https://getridian.com/?utm_source=python-sdk&utm_medium=referral&utm_campaign=python-sdk&utm_content=readme) · [API guide](https://docs.getridian.com/agent-mailbox/)
 · [Python API](https://github.com/getridian/ridian-mailbox-python/blob/main/docs/api.md) · [Release notes](https://github.com/getridian/ridian-mailbox-python/blob/main/CHANGELOG.md)
 
 ## Install
