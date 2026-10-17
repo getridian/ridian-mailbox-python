@@ -22,11 +22,12 @@ sending email and calendar access use separately authorized Ridian MCP tools.
 ```sh
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install ridian-mailbox==0.1.0a3
+python -m pip install --pre ridian-mailbox
 ```
 
-The command pins the published alpha. See [release notes](https://github.com/getridian/ridian-mailbox-python/blob/main/CHANGELOG.md) for changes
-on the main branch and the version available on PyPI.
+The `--pre` flag includes alpha releases. Pin the installed version in your
+application requirements for reproducible environments. See [release notes](https://github.com/getridian/ridian-mailbox-python/blob/main/CHANGELOG.md)
+for changes.
 
 ## Create an inbox and read email
 
